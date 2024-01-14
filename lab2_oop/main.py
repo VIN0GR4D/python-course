@@ -1,32 +1,27 @@
-from typing import Union
+class Book:
+    def __init__(self, id_, name, pages):
+        self.id = id_
+        self.name = name
+        self.pages = pages
 
+    def __str__(self):
+        return f'Книга "{self.name}"'
 
-class Glass:
-    def __init__(self, capacity_volume: Union[int, float], occupied_volume: Union[int, float]):
-        if not isinstance(capacity_volume, (int, float)):
-            raise TypeError
-        if not capacity_volume > 0:
-            raise ValueError
-        self.capacity_volume = capacity_volume  # объем стакана
+    def __repr__(self):
+        return f"Book(id_={self.id}, name='{self.name}', pages={self.pages})"
 
-        if not isinstance(occupied_volume, (int, float)):
-            raise TypeError
-        if occupied_volume < 0:
-            raise ValueError
-        self.occupied_volume = occupied_volume  # объем жидкости в стакане
+class Library:
+    def __init__(self, books=None):
+        self.books = books if books is not None else []
 
+    def get_next_book_id(self):
+        if not self.books:
+            return 1
+        else:
+            return self.books[-1].id + 1
 
-if __name__ == "__main__":
-    glass1 = Glass(200, 100)
-    print(f"Glass1: {glass1.capacity_volume} ml, {glass1.occupied_volume} ml")
-
-    glass2 = Glass(200, 150)
-    print(f"Glass2: {glass2.capacity_volume} ml, {glass2.occupied_volume} ml")
-
-    print("Доливаем воды в первый стакан...")
-    glass1.occupied_volume += 50
-    print(f"Glass1 после добавления воды: {glass1.capacity_volume} ml, {glass1.occupied_volume} ml")
-    print(f"Glass2 остается неизменным: {glass2.capacity_volume} ml, {glass2.occupied_volume} ml")
-
-    same_object = glass1 is glass2
-    print(f"glass1 и glass2 это один и тот же объект? {same_object}")
+    def get_index_by_book_id(self, book_id):
+        for index, book in enumerate(self.books):
+            if book.id == book_id:
+                return index
+        raise ValueError("Книги с запрашиваемым id не существует")
